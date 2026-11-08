@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol><li><a href="/account/orders">My orders</a></li><li><span aria-current="page">Order #<%= order.id %></span></li></ol>
+</nav>
+
+<h1>Order #<%= order.id %></h1>
+<p>Placed <%= fmtDate(order.created_at) %> &middot; <span class="status status--<%= order.status.toLowerCase() %>"><%= order.status %></span></p>
+
+<%- include('../partials/order-body', { order, admin: false }) %>
+
+<% if (order.status === 'Pending') { %>
+<form method="post" action="/account/orders/<%= order.id %>/cancel" class="inline-form" data-confirm="Cancel this order?">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <button class="btn btn--danger" type="submit">Cancel order</button>
+</form>
+<% } %>
+
+<%- include('../partials/footer') %>

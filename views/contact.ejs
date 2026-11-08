@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<h1>Contact us</h1>
+<p class="lead">Questions about a device, your order or delivery to your city? Send us a message or WhatsApp us on +92 300 111 2223.</p>
+
+<form method="post" action="/contact" class="card form-card form-narrow" novalidate data-validate>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <%- include('partials/field', { id: 'name', label: 'Your name', type: 'text', value: form.name, error: errors.name, attrs: 'required maxlength="80" autocomplete="name"' }) %>
+  <%- include('partials/field', { id: 'email', label: 'Email address', type: 'email', value: form.email, error: errors.email, attrs: 'required maxlength="254" autocomplete="email"' }) %>
+  <%- include('partials/field', { id: 'subject', label: 'Subject', type: 'text', value: form.subject, error: errors.subject, attrs: 'required minlength="3" maxlength="120"' }) %>
+  <div class="field <%= errors.body ? 'field--error' : '' %>">
+    <label for="body">Message</label>
+    <textarea id="body" name="body" rows="5" required minlength="10" maxlength="1500" <%- errors.body ? 'aria-invalid="true" aria-describedby="body-error"' : '' %>><%= form.body || '' %></textarea>
+    <% if (errors.body) { %><p class="field__error" id="body-error"><%= errors.body %></p><% } %>
+  </div>
+  <button class="btn btn--primary" type="submit">Send message</button>
+</form>
+
+<%- include('partials/footer') %>

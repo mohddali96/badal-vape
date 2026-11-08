@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+
+<h1>Stores &amp; delivery</h1>
+<p class="lead">"Badal" is the Urdu word for cloud. We opened our first counter in Gulberg, Lahore in 2021 and now have three stores and an online shop that delivers across the country.</p>
+
+<section class="section" aria-labelledby="how">
+  <div class="section-head"><h2 id="how" class="section-title">How we work</h2></div>
+  <ul class="grid grid--3 plain-list">
+    <li><h3>Stock from distributors</h3><p>We buy from authorised distributors and sell devices sealed, with the manufacturer's verification code where one exists.</p></li>
+    <li><h3>Adults only</h3><p>We ask for your age online and check your CNIC again at the door. We do not sell to anyone under 18.</p></li>
+    <li><h3>Our own juices</h3><p>The Badal house blends are mixed in Lahore in small batches, using flavours people here actually drink.</p></li>
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="stores">
+  <div class="section-head"><h2 id="stores" class="section-title">Our stores</h2></div>
+  <p class="muted">Open every day, 12:00 pm to 11:00 pm. Please bring your CNIC the first time you buy.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="sr-only">Badal Vapes store locations</caption>
+      <thead><tr><th scope="col">City</th><th scope="col">Address</th><th scope="col">Phone</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Lahore</th><td data-label="Address">52-B, MM Alam Road, Gulberg III, Lahore</td><td data-label="Phone">+92 42 3555 0142</td></tr>
+        <tr><th scope="row">Karachi</th><td data-label="Address">Shop 14, Dolmen Mall Clifton, Block 4, Clifton, Karachi</td><td data-label="Phone">+92 21 3587 0171</td></tr>
+        <tr><th scope="row">Islamabad</th><td data-label="Address">Shop 8, Jinnah Super Market, F-7 Markaz, Islamabad</td><td data-label="Phone">+92 51 2651 0188</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="delivery">
+  <div class="section-head"><h2 id="delivery" class="section-title">Delivery</h2></div>
+  <div class="table-wrap">
+    <table>
+      <caption class="sr-only">Delivery charges and times</caption>
+      <thead><tr><th scope="col">Where</th><th scope="col">Charge</th><th scope="col">Time</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Karachi, Lahore, Islamabad, Rawalpindi</th><td data-label="Charge">Rs <%= config.SHIPPING_METRO %></td><td data-label="Time">1-2 working days</td></tr>
+        <tr><th scope="row">Faisalabad, Multan, Peshawar, Quetta, Sialkot and other cities</th><td data-label="Charge">Rs <%= config.SHIPPING_OTHER %></td><td data-label="Time">2-4 working days</td></tr>
+        <tr><th scope="row">Orders over <%= pkr(config.FREE_SHIPPING_OVER) %></th><td data-label="Charge">Free</td><td data-label="Time">Same as above</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">Pay by cash on delivery, JazzCash, Easypaisa or Raast / IBFT bank transfer.</p>
+</section>
+
+<%- include('partials/footer') %>

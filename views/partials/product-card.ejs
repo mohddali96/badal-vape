@@ -1,0 +1,28 @@
+<% const onSale = p.old_price_pkr && p.old_price_pkr > p.price_pkr; %>
+<article class="card product-card" data-name="<%= (p.name + ' ' + p.brand).toLowerCase() %>">
+  <a class="product-card__art" href="/product/<%= p.slug %>" tabindex="-1" aria-hidden="true">
+    <%- include('art', { p }) %>
+    <% if (onSale) { %><span class="badge badge--sale">-<%= Math.round((p.old_price_pkr - p.price_pkr) * 100 / p.old_price_pkr) %>%</span><% } %>
+    <% if (p.stock === 0) { %><span class="badge badge--out">Sold out</span>
+    <% } else if (p.stock <= 5) { %><span class="badge badge--low">Only <%= p.stock %> left</span><% } %>
+  </a>
+  <div class="product-card__body">
+    <p class="product-card__brand"><%= p.brand %></p>
+    <h3 class="product-card__title"><a href="/product/<%= p.slug %>"><%= p.name %></a></h3>
+    <p class="rating" <% if (p.review_count) { %>role="img" aria-label="Rated <%= p.avg_rating %> out of 5 from <%= p.review_count %> reviews"<% } %>>
+      <% if (p.review_count) { %><span aria-hidden="true"><%= stars(p.avg_rating) %></span> <span class="small muted">(<%= p.review_count %>)</span>
+      <% } else { %><span class="small muted">No reviews yet</span><% } %>
+    </p>
+    <p class="price <%= onSale ? 'price--sale' : '' %>"><%= pkr(p.price_pkr) %><% if (onSale) { %><span class="old-price"><span class="sr-only">was </span><%= pkr(p.old_price_pkr) %></span><% } %></p>
+    <% if (p.stock > 0) { %>
+    <form method="post" action="/cart/add" class="js-add-to-cart">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="productId" value="<%= p.id %>">
+      <input type="hidden" name="qty" value="1">
+      <button class="btn btn--primary btn--block" type="submit">Add to cart<span class="sr-only">: <%= p.name %></span></button>
+    </form>
+    <% } else { %>
+    <button class="btn btn--block" type="button" disabled>Sold out</button>
+    <% } %>
+  </div>
+</article>

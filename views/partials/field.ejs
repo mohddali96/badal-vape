@@ -1,0 +1,11 @@
+<%# Reusable labelled input. Expects id, label, type, value, error, attrs (raw attribute string). Optional hint. %>
+<% const hasHint = typeof hint !== 'undefined' && hint; %>
+<div class="field <%= error ? 'field--error' : '' %>">
+  <label for="<%= id %>"><%= label %></label>
+  <input id="<%= id %>" name="<%= id %>" type="<%= type %>" value="<%= type === 'password' ? '' : (value === undefined || value === null ? '' : value) %>"
+    <%- attrs || '' %>
+    <% if (error || hasHint) { %>aria-describedby="<%= hasHint ? id + '-hint ' : '' %><%= error ? id + '-msg' : '' %>"<% } %>
+    <%- error ? 'aria-invalid="true"' : '' %>>
+  <% if (hasHint) { %><p class="field__hint" id="<%= id %>-hint"><%= hint %></p><% } %>
+  <% if (error) { %><p class="field__error" id="<%= id %>-msg"><%= error %></p><% } %>
+</div>

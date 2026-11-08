@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<h1>Manage orders</h1>
+<%- include('nav', { active: 'orders' }) %>
+
+<nav class="chips" aria-label="Filter by status">
+  <a href="/admin/orders" <%- !status ? 'aria-current="page"' : '' %>>All</a>
+  <% statuses.forEach(function (s) { %><a href="/admin/orders?status=<%= s %>" <%- status === s ? 'aria-current="page"' : '' %>><%= s %></a><% }) %>
+</nav>
+
+<div class="table-wrap">
+  <table>
+    <caption class="sr-only">Orders</caption>
+    <thead><tr><th scope="col">Order</th><th scope="col">Date</th><th scope="col">Customer</th><th scope="col">City</th><th scope="col">Payment</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      <% orders.forEach(function (o) { %>
+      <tr>
+        <th scope="row"><a href="/admin/orders/<%= o.id %>">#<%= o.id %></a></th>
+        <td data-label="Date"><%= fmtDate(o.created_at) %></td>
+        <td data-label="Customer"><%= o.customer %></td>
+        <td data-label="City"><%= o.ship_city %></td>
+        <td data-label="Payment"><%= paymentLabel(o.payment_method) %></td>
+        <td data-label="Total"><%= pkr(o.total_pkr) %></td>
+        <td data-label="Status"><span class="status status--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+      </tr>
+      <% }) %>
+      <% if (!orders.length) { %><tr><td colspan="7" class="muted">No orders found.</td></tr><% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

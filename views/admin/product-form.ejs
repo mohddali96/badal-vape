@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<h1><%= product ? 'Edit product' : 'Add product' %></h1>
+<%- include('nav', { active: 'products' }) %>
+
+<form method="post" action="<%= product ? '/admin/products/' + product.id : '/admin/products' %>" enctype="multipart/form-data"
+      class="card form-card form-narrow" novalidate data-validate>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+  <div class="field <%= errors.image ? 'field--error' : '' %>">
+    <label for="image">Product photo</label>
+    <div class="image-field">
+      <div class="image-field__preview" id="image-preview">
+        <% if (product) { %><%- include('../partials/art', { p: product }) %>
+        <% } else { %><span class="small muted">No photo</span><% } %>
+      </div>
+      <div class="image-field__controls">
+        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" data-max-mb="<%= maxMb %>" data-preview="image-preview"
+          aria-describedby="image-hint<%= errors.image ? ' image-msg' : '' %>">
+        <p class="field__hint" id="image-hint">JPG, PNG or WebP, up to <%= maxMb %> MB. A square image on a white background looks best. Without a photo the shop shows an illustration in the colour chosen below.</p>
+        <% if (errors.image) { %><p class="field__error" id="image-msg"><%= errors.image %></p><% } %>
+        <% if (product && product.image) { %>
+        <label class="choice"><input type="checkbox" name="remove_image"> Remove the current photo</label>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/field', { id: 'name', label: 'Product name', type: 'text', value: form.name, error: errors.name, attrs: 'required minlength="3" maxlength="120"' }) %>
+  <%- include('../partials/field', { id: 'brand', label: 'Brand', type: 'text', value: form.brand, error: errors.brand, attrs: 'required minlength="2" maxlength="60"' }) %>
+  <div class="field <%= errors.category_id ? 'field--error' : '' %>">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required>
+      <option value="">Select a category</option>
+      <% categories.forEach(function (c) { %><option value="<%= c.id %>" <%= Number(form.category_id) === c.id ? 'selected' : '' %>><%= c.name %></option><% }) %>
+    </select>
+    <% if (errors.category_id) { %><p class="field__error"><%= errors.category_id %></p><% } %>
+  </div>
+  <div class="field <%= errors.description ? 'field--error' : '' %>">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" required minlength="10" maxlength="1000"><%= form.description || '' %></textarea>
+    <% if (errors.description) { %><p class="field__error"><%= errors.description %></p><% } %>
+  </div>
+  <div class="form-row">
+    <%- include('../partials/field', { id: 'price_pkr', label: 'Price (PKR)', type: 'number', value: form.price_pkr, error: errors.price_pkr, attrs: 'required min="1" max="1000000" step="1" inputmode="numeric"' }) %>
+    <%- include('../partials/field', { id: 'old_price_pkr', label: 'Old price for a sale (optional)', type: 'number', value: form.old_price_pkr, error: errors.old_price_pkr, hint: 'Must be higher than the price. Shows a discount badge.', attrs: 'min="1" max="1000000" step="1" inputmode="numeric"' }) %>
+    <%- include('../partials/field', { id: 'stock', label: 'Stock', type: 'number', value: form.stock, error: errors.stock, attrs: 'required min="0" max="100000" step="1" inputmode="numeric"' }) %>
+  </div>
+  <div class="form-row">
+    <%- include('../partials/field', { id: 'nicotine_mg', label: 'Nicotine mg/ml (optional)', type: 'number', value: form.nicotine_mg, error: errors.nicotine_mg, attrs: 'min="0" max="60" step="1"' }) %>
+    <%- include('../partials/field', { id: 'volume_ml', label: 'Volume ml (optional)', type: 'number', value: form.volume_ml, error: errors.volume_ml, attrs: 'min="1" max="500" step="1"' }) %>
+  </div>
+  <%- include('../partials/field', { id: 'color', label: 'Illustration colour (used when there is no photo)', type: 'color', value: form.color || '#7c5cff', error: null, attrs: '' }) %>
+  <label class="choice"><input type="checkbox" name="featured" <%= form.featured ? 'checked' : '' %>> Featured on the home page</label>
+  <label class="choice"><input type="checkbox" name="active" <%= form.active ? 'checked' : '' %>> Visible in the shop</label>
+  <p>
+    <button class="btn btn--primary" type="submit"><%= product ? 'Save changes' : 'Create product' %></button>
+    <a class="btn btn--ghost" href="/admin/products">Cancel</a>
+  </p>
+</form>
+
+<%- include('../partials/footer') %>

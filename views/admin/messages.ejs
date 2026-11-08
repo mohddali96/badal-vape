@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+
+<h1>Customer messages</h1>
+<%- include('nav', { active: 'messages' }) %>
+
+<% if (!messages.length) { %><p class="muted">No messages yet.</p><% } %>
+<ul class="message-list">
+  <% messages.forEach(function (m) { %>
+  <li class="card message <%= m.is_read ? '' : 'message--unread' %>">
+    <h2><%= m.subject %> <% if (!m.is_read) { %><span class="badge">New</span><% } %></h2>
+    <p class="small muted">From <%= m.name %> &lt;<%= m.email %>&gt; &middot; <%= fmtDate(m.created_at) %></p>
+    <p><%= m.body %></p>
+    <div class="actions">
+      <% if (!m.is_read) { %>
+      <form method="post" action="/admin/messages/<%= m.id %>/read" class="inline-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn--sm" type="submit">Mark as read</button>
+      </form>
+      <% } %>
+      <form method="post" action="/admin/messages/<%= m.id %>/delete" class="inline-form" data-confirm="Delete this message?">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn--sm btn--danger" type="submit">Delete</button>
+      </form>
+    </div>
+  </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>

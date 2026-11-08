@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<h1>My account</h1>
+<%- include('nav', { active: 'orders' }) %>
+
+<h2>Order history</h2>
+<% if (!orders.length) { %>
+<div class="empty"><p>You have not placed any orders yet.</p><a class="btn btn--primary" href="/shop">Start shopping</a></div>
+<% } else { %>
+<div class="table-wrap">
+  <table>
+    <caption class="sr-only">Your orders</caption>
+    <thead><tr><th scope="col">Order</th><th scope="col">Date</th><th scope="col">Items</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      <% orders.forEach(function (o) { %>
+      <tr>
+        <th scope="row"><a href="/account/orders/<%= o.id %>">#<%= o.id %></a></th>
+        <td data-label="Date"><%= fmtDate(o.created_at) %></td>
+        <td data-label="Items"><%= o.item_count %></td>
+        <td data-label="Total"><%= pkr(o.total_pkr) %></td>
+        <td data-label="Status"><span class="status status--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

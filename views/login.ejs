@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+
+<div class="auth-wrap">
+  <h1>Sign in</h1>
+  <form method="post" action="/login" class="card form-card" novalidate data-validate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="next" value="<%= next %>">
+    <% if (error) { %><p class="flash flash--error" role="alert"><%= error %></p><% } %>
+    <%- include('partials/field', { id: 'email', label: 'Email address', type: 'email', value: email, error: null, attrs: 'required autocomplete="email"' }) %>
+    <%- include('partials/field', { id: 'password', label: 'Password', type: 'password', value: '', error: null, attrs: 'required autocomplete="current-password"' }) %>
+    <button class="btn btn--primary btn--block" type="submit">Sign in</button>
+  </form>
+  <p>New to Badal Vapes? <a href="/register">Create an account</a></p>
+</div>
+
+<%- include('partials/footer') %>

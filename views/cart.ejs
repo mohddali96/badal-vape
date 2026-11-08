@@ -1,0 +1,62 @@
+<%- include('partials/header') %>
+
+<h1>Your cart</h1>
+
+<% if (!lines.length) { %>
+<div class="empty">
+  <h2>Your cart is empty</h2>
+  <p>Find something you like in our <a href="/shop">shop</a>.</p>
+</div>
+<% } else { %>
+<div class="cart-layout">
+  <div class="table-wrap">
+    <table class="cart-table">
+      <caption class="sr-only">Items in your cart</caption>
+      <thead><tr><th scope="col">Product</th><th scope="col">Price</th><th scope="col">Quantity</th><th scope="col">Total</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead>
+      <tbody>
+        <% lines.forEach(function (l) { %>
+        <tr>
+          <th scope="row">
+            <span class="cell-product">
+              <span class="art--thumb"><%- include('partials/art', { p: l, decorative: true }) %></span>
+              <a href="/product/<%= l.slug %>"><%= l.name %></a>
+            </span>
+          </th>
+<td data-label="Price"><%= pkr(l.price_pkr) %></td>
+          <td data-label="Quantity">
+            <form method="post" action="/cart/update" class="qty-form">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="productId" value="<%= l.id %>">
+              <label class="sr-only" for="qty-<%= l.id %>">Quantity for <%= l.name %></label>
+              <input id="qty-<%= l.id %>" name="qty" type="number" min="0" max="<%= Math.min(10, l.stock) %>" value="<%= l.qty %>" inputmode="numeric">
+              <button class="btn btn--sm" type="submit">Update</button>
+            </form>
+          </td>
+          <td data-label="Total"><strong><%= pkr(l.line_total) %></strong></td>
+          <td>
+            <form method="post" action="/cart/remove">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="productId" value="<%= l.id %>">
+              <button class="link-button link-button--danger" type="submit">Remove<span class="sr-only"> <%= l.name %></span></button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <aside class="card summary" aria-labelledby="sum-title">
+    <h2 id="sum-title">Order summary</h2>
+    <dl class="summary__rows">
+      <div><dt>Subtotal</dt><dd><%= pkr(subtotal) %></dd></div>
+      <div><dt>Delivery</dt><dd><%= subtotal >= freeOver ? 'Free' : 'Calculated at checkout' %></dd></div>
+    </dl>
+    <% if (subtotal < freeOver) { %><p class="small muted">Add <%= pkr(freeOver - subtotal) %> more for free delivery.</p><% } %>
+    <a class="btn btn--primary btn--block btn--lg" href="/checkout">Proceed to checkout</a>
+    <a class="btn btn--ghost btn--block" href="/shop">Continue shopping</a>
+  </aside>
+</div>
+<% } %>
+
+<%- include('partials/footer') %>

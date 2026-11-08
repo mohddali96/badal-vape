@@ -1,0 +1,91 @@
+<%- include('partials/header') %>
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__text">
+    <p class="eyebrow">Lahore &middot; Karachi &middot; Islamabad &middot; online</p>
+    <h1 id="hero-title">Vapes, pods and e&#8209;liquid, delivered across Pakistan.</h1>
+    <p class="lead">Devices from Voopoo, Vaporesso, Geekvape and Elf Bar, plus our own juices mixed in Lahore. Order online and pay on delivery, or visit a store in Gulberg, Clifton or F-7.</p>
+    <p class="hero__actions">
+      <a class="btn btn--sky btn--lg" href="/shop">Browse the shop</a>
+      <a class="btn btn--lg" href="/shop?sale=1">See the sale</a>
+    </p>
+    <ul class="hero__facts">
+      <li>Cash on delivery, JazzCash, Easypaisa or bank transfer</li>
+      <li>Rs <%= config.SHIPPING_METRO %> delivery to Karachi, Lahore, Islamabad and Rawalpindi</li>
+      <li>Please keep your CNIC handy: we check age on delivery</li>
+    </ul>
+  </div>
+
+  <a class="hero__panel" href="/shop">
+    <img class="hero__photo" src="/img/hero.jpg" width="1100" height="900" alt="A row of vape pens, tanks and box mods on display">
+    <p class="hero__caption"><strong>Pens, pods and mods</strong><span>From Rs 900 &middot; browse every brand</span></p>
+  </a>
+</section>
+
+<section class="section" aria-labelledby="cat-title">
+  <h2 id="cat-title" class="section-title">Shop by category</h2>
+  <ul class="category-grid">
+    <% categories.forEach(function (c) { %>
+    <li>
+      <a class="category-tile" href="/shop?category=<%= c.slug %>">
+        <span class="category-tile__name"><%= c.name %></span>
+        <span class="category-tile__count"><%= c.product_count %> items</span>
+        <span class="category-tile__desc"><%= c.description %></span>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</section>
+
+<% if (onSale.length) { %>
+<section class="section" aria-labelledby="sale-title">
+  <div class="section-head">
+    <h2 id="sale-title" class="section-title">On sale</h2>
+    <a href="/shop?sale=1">View all sale items</a>
+  </div>
+  <div class="grid">
+    <% onSale.forEach(function (p) { %><%- include('partials/product-card', { p }) %><% }) %>
+  </div>
+</section>
+<% } %>
+
+<section class="section" aria-labelledby="feat-title">
+  <div class="section-head">
+    <h2 id="feat-title" class="section-title">Popular right now</h2>
+    <a href="/shop">See everything</a>
+  </div>
+  <div class="grid">
+    <% featured.forEach(function (p) { %><%- include('partials/product-card', { p }) %><% }) %>
+  </div>
+</section>
+
+<section class="section promo" aria-labelledby="promo-title">
+  <div>
+    <p class="eyebrow">Made in Lahore</p>
+    <h2 id="promo-title">Badal house blends</h2>
+    <p>Four nicotine-salt flavours based on things we grew up with: kulfi falooda, mango lassi, Rooh Afza and karak chai. We mix them in small batches and sell 30ml bottles for Rs 1,900.</p>
+    <a class="btn btn--primary" href="/shop?q=House+Blend">See the blends</a>
+  </div>
+  <ul class="promo__list">
+    <% houseBlends.forEach(function (p) { %>
+    <li><a href="/product/<%= p.slug %>"><svg class="swatch" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="9" fill="<%= p.color %>" stroke="#161922" stroke-width="1"/></svg><%= p.name.replace('Badal House Blend - ', '') %></a></li>
+    <% }) %>
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="rev-title">
+  <h2 id="rev-title" class="section-title">From customer reviews</h2>
+  <div class="grid grid--3">
+    <% topReviews.forEach(function (r) { %>
+    <figure class="card review-card">
+      <blockquote><%= r.comment %></blockquote>
+      <figcaption>
+        <span class="rating" role="img" aria-label="<%= r.rating %> out of 5 stars"><span aria-hidden="true"><%= stars(r.rating) %></span></span><br>
+        <strong><%= r.user_name %></strong>, <%= r.city %>, on <a href="/product/<%= r.slug %>"><%= r.product_name %></a>
+      </figcaption>
+    </figure>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

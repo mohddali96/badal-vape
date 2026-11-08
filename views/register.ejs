@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+<div class="auth-wrap auth-wrap--wide">
+  <h1>Create your account</h1>
+  <p class="muted">You must be 18 or older. Your details are used only to deliver your orders.</p>
+  <form method="post" action="/register" class="card form-card" novalidate data-validate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('partials/field', { id: 'name', label: 'Full name', type: 'text', value: form.name, error: errors.name, attrs: 'required maxlength="80" autocomplete="name"' }) %>
+    <%- include('partials/field', { id: 'email', label: 'Email address', type: 'email', value: form.email, error: errors.email, attrs: 'required maxlength="254" autocomplete="email"' }) %>
+    <%- include('partials/field', { id: 'phone', label: 'Mobile number', type: 'tel', value: form.phone, error: errors.phone, hint: 'Pakistani mobile, e.g. 0300 1234567 or +92 300 1234567', attrs: 'required inputmode="tel" autocomplete="tel" data-pk-mobile' }) %>
+    <div class="field <%= errors.city ? 'field--error' : '' %>">
+      <label for="city">City</label>
+      <select id="city" name="city" required <%- errors.city ? 'aria-invalid="true" aria-describedby="city-msg"' : '' %>>
+        <option value="">Select your city</option>
+        <% cities.forEach(function (c) { %><option <%= form.city === c ? 'selected' : '' %>><%= c %></option><% }) %>
+      </select>
+      <% if (errors.city) { %><p class="field__error" id="city-msg"><%= errors.city %></p><% } %>
+    </div>
+    <%- include('partials/field', { id: 'address', label: 'Delivery address', type: 'text', value: form.address, error: errors.address, hint: 'House, street, area / sector', attrs: 'required minlength="10" maxlength="200" autocomplete="street-address"' }) %>
+    <%- include('partials/field', { id: 'dob', label: 'Date of birth', type: 'date', value: form.dob, error: errors.dob, attrs: 'required autocomplete="bday"' }) %>
+    <%- include('partials/field', { id: 'password', label: 'Password', type: 'password', value: '', error: errors.password, hint: 'At least 8 characters with a letter and a number', attrs: 'required minlength="8" maxlength="72" autocomplete="new-password" data-strength' }) %>
+    <p class="strength" id="strength" aria-live="polite"></p>
+    <%- include('partials/field', { id: 'confirm', label: 'Confirm password', type: 'password', value: '', error: errors.confirm, attrs: 'required autocomplete="new-password"' }) %>
+    <button class="btn btn--primary btn--block" type="submit">Create account</button>
+  </form>
+  <p>Already registered? <a href="/login">Sign in</a></p>
+</div>
+
+<%- include('partials/footer') %>

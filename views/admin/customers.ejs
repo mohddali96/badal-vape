@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+
+<h1>Customers</h1>
+<%- include('nav', { active: 'customers' }) %>
+
+<div class="table-wrap">
+  <table>
+    <caption class="sr-only">Registered users</caption>
+    <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th><th scope="col">City</th><th scope="col">Orders</th><th scope="col">Spent</th><th scope="col">Role</th></tr></thead>
+    <tbody>
+      <% customers.forEach(function (c) { %>
+      <tr>
+        <th scope="row"><%= c.name %></th>
+        <td data-label="Email"><%= c.email %></td>
+        <td data-label="Phone"><%= c.phone %></td>
+        <td data-label="City"><%= c.city %></td>
+        <td data-label="Orders"><%= c.order_count %></td>
+        <td data-label="Spent"><%= pkr(c.spent) %></td>
+        <td data-label="Role"><%= c.role %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,57 @@
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <section aria-labelledby="f-about">
+        <h2 id="f-about">About us</h2>
+        <p>Badal Vape Co. started on MM Alam Road, Lahore. We sell devices, pods and e-liquid online and in three stores, and mix our own juices in Lahore.</p>
+      </section>
+      <nav aria-label="Footer">
+        <h2>Shop</h2>
+        <ul>
+          <li><a href="/shop?category=disposables">Disposables</a></li>
+          <li><a href="/shop?category=pod-systems">Pod kits</a></li>
+          <li><a href="/shop?category=box-mods">Box mods</a></li>
+          <li><a href="/shop?category=e-liquids">E-liquids</a></li>
+          <li><a href="/shop?sale=1">Sale</a></li>
+        </ul>
+      </nav>
+      <section aria-labelledby="f-help">
+        <h2 id="f-help">Help</h2>
+        <ul>
+          <li><a href="/about">Stores &amp; delivery</a></li>
+          <li><a href="/contact">Contact us</a></li>
+          <li><a href="/account/orders">My orders</a></li>
+          <li><a href="/credits">Image credits</a></li>
+          <li>WhatsApp +92 300 111 2223</li>
+        </ul>
+      </section>
+      <section aria-labelledby="f-pay">
+        <h2 id="f-pay">Payment</h2>
+        <ul>
+          <li>Cash on delivery</li><li>JazzCash</li><li>Easypaisa</li><li>Raast / IBFT transfer</li>
+        </ul>
+      </section>
+    </div>
+    <div class="container footer-legal">
+      <p><strong>Health warning:</strong> this product contains nicotine, which is addictive. For adults aged 18 and over. Not for pregnant or breastfeeding women. Keep away from children.</p>
+      <p class="small">&copy; <%= new Date().getFullYear() %> Badal Vape Co. This is a fictional shop built for a university coursework project; all names, numbers and addresses are examples.</p>
+    </div>
+  </footer>
+
+  <aside aria-label="Chat support"><a class="wa-float" href="https://wa.me/923001112223" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp (opens in a new tab)">
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M6 5h20a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H14l-7 5v-5H6a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3Z" fill="#fff"/><circle cx="10.500" cy="14" r="1.800" fill="#25d366"/><circle cx="16" cy="14" r="1.800" fill="#25d366"/><circle cx="21.500" cy="14" r="1.800" fill="#25d366"/></svg>
+  </a></aside>
+
+  <nav class="tabbar" aria-label="Quick links">
+    <a href="/" <%- currentPath === '/' ? 'aria-current="page"' : '' %>>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3L12 3Z"/></svg>Home</a>
+    <a href="/shop" <%- currentPath === '/shop' ? 'aria-current="page"' : '' %>>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z"/></svg>Shop</a>
+    <a href="/cart" <%- currentPath === '/cart' ? 'aria-current="page"' : '' %> >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM1 2v2h2l3.6 7.6-1.4 2.4A2 2 0 0 0 7 17h12v-2H7.4l1.1-2h7.5a2 2 0 0 0 1.7-1l3.6-6.5A1 1 0 0 0 20.4 4H5.2l-.9-2H1Z"/></svg>Cart<span class="cart-count"><%= cartCount %></span><span class="sr-only"> items</span></a>
+    <a href="<%= user ? '/account/orders' : '/login' %>" <%- currentPath.startsWith('/account') || currentPath === '/login' ? 'aria-current="page"' : '' %>>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4 0-8 2-8 5v3h16v-3c0-3-4-5-8-5Z"/></svg><%= user ? 'Account' : 'Sign in' %></a>
+  </nav>
+</body>
+</html>

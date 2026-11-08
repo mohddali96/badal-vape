@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> | Badal Vapes</title>
+  <meta name="description" content="Badal Vapes sells vape devices, pods, coils and e-liquid across Pakistan, with cash on delivery. Customers must be 18 or over.">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <meta name="theme-color" content="#4acbfd">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/main.js" defer></script>
+</head>
+<body class="<%= showAgeGate ? 'gate-open' : '' %>">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <% if (showAgeGate) { %>
+  <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" aria-describedby="age-desc">
+    <div class="age-gate__box">
+      <p class="age-gate__brand" aria-hidden="true">Badal<small>Vape Co.</small></p>
+      <h2 id="age-title">Age verification</h2>
+      <p id="age-desc">To use this website you must be at least 18 years old. Please confirm your age before entering the site.</p>
+      <form method="post" action="/age-verify" id="age-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="next" value="<%= currentPath %>">
+        <p class="small"><strong>Are you over 18 years of age?</strong></p>
+        <div class="age-gate__choices">
+          <button class="btn" type="submit">Yes</button>
+          <a class="btn" href="/age-restricted">No</a>
+        </div>
+        <label class="choice"><input type="checkbox" name="remember" id="age-remember" checked> Remember me</label>
+      </form>
+      <p class="small muted">Nicotine is addictive. Vaping is not advised for non-smokers.</p>
+    </div>
+  </div>
+  <% } %>
+
+  <div class="topbar" role="region" aria-label="Delivery offer">
+    <p>Cash on delivery in 15 cities &middot; Free delivery over <%= pkr(config.FREE_SHIPPING_OVER) %></p>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="/">
+        <span class="brand__word">Badal</span> <span class="brand__sub">Vape <br>Co.</span><span class="sr-only"> home</span>
+      </a>
+
+      <form class="header-search" role="search" aria-label="Site search" action="/shop" method="get">
+        <label class="sr-only" for="site-search">Search products</label>
+        <input id="site-search" name="q" type="search" placeholder="Search vapes, pods, e-liquid..." maxlength="60" autocomplete="off">
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2Zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z"/></svg>
+        </button>
+      </form>
+
+      <div class="header-actions">
+        <a class="cart-link" href="/cart">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM1 2v2h2l3.6 7.6-1.4 2.4A2 2 0 0 0 7 17h12v-2H7.4l1.1-2h7.5a2 2 0 0 0 1.7-1l3.6-6.5A1 1 0 0 0 20.4 4H5.2l-.9-2H1Z"/></svg>
+          Cart <span class="cart-count"><%= cartCount %></span><span class="sr-only"> items</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="sr-only">Menu</span><span class="nav-toggle__bars" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <div class="container">
+        <ul>
+          <li><a href="/" <%- currentPath === '/' ? 'aria-current="page"' : '' %>>Home</a></li>
+          <li><a href="/shop?category=disposables">Disposables</a></li>
+          <li><a href="/shop?category=pod-systems">Pod kits</a></li>
+          <li><a href="/shop?category=box-mods">Box mods</a></li>
+          <li><a href="/shop?category=e-liquids">E-liquids</a></li>
+          <li><a href="/shop?category=coils-pods">Coils &amp; pods</a></li>
+          <li><a href="/shop?category=accessories">Accessories</a></li>
+          <li><a class="nav-sale" href="/shop?sale=1">Sale</a></li>
+          <li><a href="/about" <%- currentPath === '/about' ? 'aria-current="page"' : '' %>>Stores</a></li>
+          <% if (user && user.role === 'admin') { %>
+          <li><a href="/admin" <%- currentPath.startsWith('/admin') ? 'aria-current="page"' : '' %>>Admin</a></li>
+          <% } %>
+        </ul>
+        <ul class="site-nav__account">
+          <% if (user) { %>
+          <li><a href="/account/orders" <%- currentPath.startsWith('/account') ? 'aria-current="page"' : '' %>>My account</a></li>
+          <li>
+            <form method="post" action="/logout" class="inline-form">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button class="link-button" type="submit">Sign out</button>
+            </form>
+          </li>
+          <% } else { %>
+          <li><a href="/login" <%- currentPath === '/login' ? 'aria-current="page"' : '' %>>Sign in</a></li>
+          <li><a class="btn btn--primary btn--sm" href="/register">Create account</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+
+  <main id="main" class="container main" tabindex="-1">
+    <% if (flash && flash.length) { %>
+      <div class="flash-stack">
+      <% flash.forEach(function (f) { %>
+        <p class="flash flash--<%= f.type %>" role="<%= f.type === 'error' ? 'alert' : 'status' %>"><%= f.message %></p>
+      <% }) %>
+      </div>
+    <% } %>

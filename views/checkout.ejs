@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<h1>Checkout</h1>
+
+<div class="cart-layout">
+  <form method="post" action="/checkout" class="card form-card" novalidate data-validate id="checkout-form"
+        data-subtotal="<%= subtotal %>" data-free-over="<%= config.FREE_SHIPPING_OVER %>"
+        data-metro="<%= config.METRO_CITIES.join(',') %>" data-ship-metro="<%= config.SHIPPING_METRO %>" data-ship-other="<%= config.SHIPPING_OTHER %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <fieldset>
+      <legend>Delivery details</legend>
+      <%- include('partials/field', { id: 'name', label: 'Receiver name', type: 'text', value: form.name, error: errors.name, attrs: 'required maxlength="80" autocomplete="name"' }) %>
+      <%- include('partials/field', { id: 'phone', label: 'Mobile number', type: 'tel', value: form.phone, error: errors.phone, hint: 'Our rider will call this number, e.g. 0300 1234567', attrs: 'required inputmode="tel" autocomplete="tel" data-pk-mobile' }) %>
+      <div class="field <%= errors.city ? 'field--error' : '' %>">
+        <label for="city">City</label>
+        <select id="city" name="city" required <%- errors.city ? 'aria-invalid="true" aria-describedby="city-msg"' : '' %>>
+          <option value="">Select city</option>
+          <% cities.forEach(function (c) { %><option <%= form.city === c ? 'selected' : '' %>><%= c %></option><% }) %>
+        </select>
+        <% if (errors.city) { %><p class="field__error" id="city-msg"><%= errors.city %></p><% } %>
+      </div>
+      <%- include('partials/field', { id: 'address', label: 'Full address', type: 'text', value: form.address, error: errors.address, hint: 'House / flat, street, area, nearby landmark', attrs: 'required minlength="10" maxlength="200" autocomplete="street-address"' }) %>
+      <div class="field">
+        <label for="notes">Order notes (optional)</label>
+        <textarea id="notes" name="notes" rows="2" maxlength="300"><%= form.notes %></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="<%= errors.payment ? 'field--error' : '' %>">
+      <legend>Payment method</legend>
+      <% Object.entries(config.PAYMENT_METHODS).forEach(function ([key, label]) { %>
+      <label class="choice"><input type="radio" name="payment" value="<%= key %>" <%= form.payment === key ? 'checked' : '' %> required> <%= label %></label>
+      <% }) %>
+      <p class="small muted">For JazzCash, Easypaisa and bank transfers we will send payment details by WhatsApp after you place the order.</p>
+      <% if (errors.payment) { %><p class="field__error"><%= errors.payment %></p><% } %>
+    </fieldset>
+
+    <div class="field <%= errors.age_confirm ? 'field--error' : '' %>">
+      <label class="choice"><input type="checkbox" name="age_confirm" required <%- errors.age_confirm ? 'aria-invalid="true"' : '' %>> I confirm that I am 18 years or older and will show my CNIC on delivery.</label>
+      <% if (errors.age_confirm) { %><p class="field__error"><%= errors.age_confirm %></p><% } %>
+    </div>
+
+    <button class="btn btn--primary btn--lg" type="submit">Place order</button>
+  </form>
+
+  <aside class="card summary" aria-labelledby="sum-title">
+    <h2 id="sum-title">Your order</h2>
+    <ul class="summary__items">
+      <% lines.forEach(function (l) { %><li><span><%= l.qty %> &times; <%= l.name %></span><span><%= pkr(l.line_total) %></span></li><% }) %>
+    </ul>
+    <dl class="summary__rows">
+      <div><dt>Subtotal</dt><dd><%= pkr(subtotal) %></dd></div>
+      <div><dt>Delivery</dt><dd id="ship-cost"><%= shipping === 0 ? 'Free' : pkr(shipping) %></dd></div>
+      <div class="summary__total"><dt>Total</dt><dd id="order-total"><%= pkr(subtotal + shipping) %></dd></div>
+    </dl>
+    <a class="small" href="/cart">Edit cart</a>
+  </aside>
+</div>
+
+<%- include('partials/footer') %>

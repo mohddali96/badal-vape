@@ -1,0 +1,30 @@
+<div class="two-col">
+  <section class="card" aria-labelledby="ship-h-<%= order.id %>">
+    <h2 id="ship-h-<%= order.id %>">Delivery</h2>
+    <address>
+      <strong><%= order.ship_name %></strong><br>
+      <%= order.ship_address %><br>
+      <%= order.ship_city %>, Pakistan<br>
+      Phone: <%= order.ship_phone %>
+    </address>
+    <p><strong>Payment:</strong> <%= paymentLabel(order.payment_method) %></p>
+    <% if (order.notes) { %><p><strong>Notes:</strong> <%= order.notes %></p><% } %>
+    <% if (!admin && order.payment_method !== 'cod' && order.status === 'Pending') { %>
+    <p class="small muted">We will WhatsApp you the payment details shortly.</p>
+    <% } %>
+  </section>
+
+  <section class="card" aria-labelledby="items-h-<%= order.id %>">
+    <h2 id="items-h-<%= order.id %>">Items</h2>
+    <ul class="summary__items">
+      <% order.items.forEach(function (i) { %>
+      <li><span><%= i.qty %> &times; <%= i.name %></span><span><%= pkr(i.unit_price_pkr * i.qty) %></span></li>
+      <% }) %>
+    </ul>
+    <dl class="summary__rows">
+      <div><dt>Subtotal</dt><dd><%= pkr(order.subtotal_pkr) %></dd></div>
+      <div><dt>Delivery</dt><dd><%= order.shipping_pkr === 0 ? 'Free' : pkr(order.shipping_pkr) %></dd></div>
+      <div class="summary__total"><dt>Total</dt><dd><%= pkr(order.total_pkr) %></dd></div>
+    </dl>
+  </section>
+</div>

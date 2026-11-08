@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<h1>Manage products</h1>
+<%- include('nav', { active: 'products' }) %>
+
+<div class="toolbar">
+  <form method="get" action="/admin/products" role="search" aria-label="Search admin products" class="inline-form">
+    <label class="sr-only" for="aq">Search products</label>
+    <input id="aq" name="q" type="search" value="<%= q %>" placeholder="Search name or brand">
+    <button class="btn" type="submit">Search</button>
+  </form>
+  <a class="btn btn--primary" href="/admin/products/new">+ Add product</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <caption class="sr-only">All products</caption>
+    <thead><tr><th scope="col">Product</th><th scope="col">Category</th><th scope="col">Price</th><th scope="col">Stock</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+    <tbody>
+      <% products.forEach(function (p) { %>
+      <tr id="p<%= p.id %>">
+        <th scope="row">
+          <span class="cell-product">
+            <span class="art--thumb"><%- include('../partials/art', { p, decorative: true }) %></span>
+            <span><%= p.name %><br><span class="small muted"><%= p.brand %></span></span>
+          </span>
+        </th>
+        <td data-label="Category"><%= p.category_name %></td>
+        <td data-label="Price"><%= pkr(p.price_pkr) %><% if (p.old_price_pkr && p.old_price_pkr > p.price_pkr) { %> <span class="old-price"><%= pkr(p.old_price_pkr) %></span><% } %></td>
+        <td data-label="Stock"><%= p.stock %></td>
+        <td data-label="Status"><%= p.active ? 'Active' : 'Hidden' %><%= p.featured ? ' / Featured' : '' %></td>
+        <td class="actions">
+          <a class="btn btn--sm" href="/admin/products/<%= p.id %>/edit">Edit<span class="sr-only"> <%= p.name %></span></a>
+          <form method="post" action="/admin/products/<%= p.id %>/delete" class="inline-form" data-confirm="Delete &quot;<%= p.name %>&quot;?">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn btn--sm btn--danger" type="submit">Delete<span class="sr-only"> <%= p.name %></span></button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

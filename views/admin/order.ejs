@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol><li><a href="/admin/orders">Orders</a></li><li><span aria-current="page">Order #<%= order.id %></span></li></ol>
+</nav>
+
+<h1>Order #<%= order.id %></h1>
+<p><%= order.customer %> (<%= order.email %>) &middot; <%= fmtDate(order.created_at) %> &middot; <span class="status status--<%= order.status.toLowerCase() %>"><%= order.status %></span></p>
+
+<%- include('../partials/order-body', { order, admin: true }) %>
+
+<% if (order.status !== 'Cancelled' && order.status !== 'Delivered') { %>
+<form method="post" action="/admin/orders/<%= order.id %>/status" class="card form-card form-narrow">
+  <h2>Update status</h2>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div class="field">
+    <label for="status">New status</label>
+    <select id="status" name="status">
+      <% statuses.forEach(function (s) { %><option <%= s === order.status ? 'selected' : '' %>><%= s %></option><% }) %>
+    </select>
+    <p class="field__hint">Cancelling an order returns its items to stock.</p>
+  </div>
+  <button class="btn btn--primary" type="submit">Update status</button>
+</form>
+<% } else { %>
+<p class="muted">This order is <%= order.status.toLowerCase() %> and can no longer be changed.</p>
+<% } %>
+
+<%- include('../partials/footer') %>

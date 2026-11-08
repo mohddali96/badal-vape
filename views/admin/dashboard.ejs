@@ -1,0 +1,55 @@
+<%- include('../partials/header') %>
+
+<h1>Admin dashboard</h1>
+<%- include('nav', { active: 'dashboard' }) %>
+
+<ul class="stat-grid">
+  <li class="card stat"><span class="stat__num"><%= pkr(stats.revenue) %></span><span class="stat__label">Revenue (excl. cancelled)</span></li>
+  <li class="card stat"><span class="stat__num"><%= stats.orders %></span><span class="stat__label">Total orders</span></li>
+  <li class="card stat"><span class="stat__num"><%= stats.pending %></span><span class="stat__label">Pending orders</span></li>
+  <li class="card stat"><span class="stat__num"><%= stats.customers %></span><span class="stat__label">Customers</span></li>
+  <li class="card stat"><span class="stat__num"><%= stats.products %></span><span class="stat__label">Active products</span></li>
+  <li class="card stat"><span class="stat__num"><%= stats.unread %></span><span class="stat__label">Unread messages</span></li>
+</ul>
+
+<div class="two-col">
+  <section class="card" aria-labelledby="recent-h">
+    <h2 id="recent-h">Recent orders</h2>
+    <table>
+      <thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <% recent.forEach(function (o) { %>
+        <tr><th scope="row"><a href="/admin/orders/<%= o.id %>">#<%= o.id %></a></th><td><%= o.customer %></td><td><%= pkr(o.total_pkr) %></td><td><span class="status status--<%= o.status.toLowerCase() %>"><%= o.status %></span></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" aria-labelledby="stock-h">
+    <h2 id="stock-h">Low stock</h2>
+    <% if (!lowStock.length) { %><p class="muted">All products are well stocked.</p><% } else { %>
+    <ul class="plain-list">
+      <% lowStock.forEach(function (p) { %><li><a href="/admin/products/<%= p.id %>/edit"><%= p.name %></a> &mdash; <strong><%= p.stock %></strong> left</li><% }) %>
+    </ul>
+    <% } %>
+  </section>
+
+  <section class="card" aria-labelledby="status-h">
+    <h2 id="status-h">Orders by status</h2>
+    <ul class="plain-list">
+      <% byStatus.forEach(function (s) { %><li><span class="status status--<%= s.status.toLowerCase() %>"><%= s.status %></span> <%= s.n %></li><% }) %>
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="city-h">
+    <h2 id="city-h">Top cities by revenue</h2>
+    <table>
+      <thead><tr><th scope="col">City</th><th scope="col">Orders</th><th scope="col">Revenue</th></tr></thead>
+      <tbody>
+        <% byCity.forEach(function (c) { %><tr><th scope="row"><%= c.city %></th><td><%= c.n %></td><td><%= pkr(c.revenue) %></td></tr><% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<h1>Image credits</h1>
+<p class="lead">The product and banner photos in this demo shop are real photographs shared under Creative Commons licences. Thank you to the photographers below. The images were cropped and resized for this site.</p>
+<p class="small muted">The photographs show a range of vaping hardware and are used as stand-ins; they do not show the exact items named in the shop.</p>
+
+<div class="table-wrap">
+  <table>
+    <caption class="sr-only">Photo credits</caption>
+    <thead><tr><th scope="col">Photo</th><th scope="col">Photographer</th><th scope="col">Licence</th><th scope="col">Used for</th></tr></thead>
+    <tbody>
+      <% credits.forEach(function (c) { %>
+      <tr>
+        <th scope="row"><a href="<%= c.source %>" rel="noopener noreferrer" target="_blank"><%= c.title %><span class="sr-only"> (opens in a new tab)</span></a></th>
+        <td data-label="Photographer"><%= c.creator %></td>
+        <td data-label="Licence"><a href="<%= c.licenseUrl %>" rel="noopener noreferrer" target="_blank"><%= c.license %></a></td>
+        <td data-label="Used for"><%= c.usedFor %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

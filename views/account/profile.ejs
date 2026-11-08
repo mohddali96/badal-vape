@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+
+<h1>My account</h1>
+<%- include('nav', { active: 'profile' }) %>
+
+<div class="two-col">
+  <form method="post" action="/account/profile" class="card form-card" novalidate data-validate>
+    <h2>Delivery profile</h2>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field">
+      <label for="email-ro">Email (cannot be changed)</label>
+      <input id="email-ro" type="email" value="<%= user.email %>" readonly>
+    </div>
+    <%- include('../partials/field', { id: 'name', label: 'Full name', type: 'text', value: form.name, error: errors.name, attrs: 'required maxlength="80" autocomplete="name"' }) %>
+    <%- include('../partials/field', { id: 'phone', label: 'Mobile number', type: 'tel', value: form.phone, error: errors.phone, attrs: 'required inputmode="tel" data-pk-mobile' }) %>
+    <div class="field <%= errors.city ? 'field--error' : '' %>">
+      <label for="city">City</label>
+      <select id="city" name="city" required>
+        <% cities.forEach(function (c) { %><option <%= form.city === c ? 'selected' : '' %>><%= c %></option><% }) %>
+      </select>
+      <% if (errors.city) { %><p class="field__error"><%= errors.city %></p><% } %>
+    </div>
+    <%- include('../partials/field', { id: 'address', label: 'Address', type: 'text', value: form.address, error: errors.address, attrs: 'required minlength="10" maxlength="200"' }) %>
+    <button class="btn btn--primary" type="submit">Save changes</button>
+  </form>
+
+  <form method="post" action="/account/password" class="card form-card" novalidate data-validate>
+    <h2>Change password</h2>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('../partials/field', { id: 'current', label: 'Current password', type: 'password', value: '', error: null, attrs: 'required autocomplete="current-password"' }) %>
+    <%- include('../partials/field', { id: 'password', label: 'New password', type: 'password', value: '', error: null, hint: 'At least 8 characters with a letter and a number', attrs: 'required minlength="8" maxlength="72" autocomplete="new-password"' }) %>
+    <%- include('../partials/field', { id: 'confirm', label: 'Confirm new password', type: 'password', value: '', error: null, attrs: 'required autocomplete="new-password"' }) %>
+    <button class="btn btn--primary" type="submit">Update password</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>
